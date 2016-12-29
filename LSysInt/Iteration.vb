@@ -76,12 +76,12 @@ Public Class Iteration
             pen = False
 
             Try
-                Select Case s(0)
+                Select Case Rule.GetFcnName(s)
                     Case "F" : If valIsValid Then v2.Move(val * v1.Magnitude) : pen = True
                     Case "B" : If valIsValid Then v2.Move(-val * v1.Magnitude) : pen = True
                     Case "f" : If valIsValid Then v2.Move(val * v1.Magnitude)
-                    Case "+" : If valIsValid Then v2.Angle += val
-                    Case "-" : If valIsValid Then v2.Angle -= val
+                    Case "+" : If valIsValid Then v2.Angle += val Else v2.Angle += 90
+                    Case "-" : If valIsValid Then v2.Angle -= val Else v2.Angle -= 90
                     Case "[" : vStack.Push(New Vector(v2))
                     Case "]" : v2 = vStack.Pop() : Continue For
                     Case "%"

@@ -81,4 +81,13 @@
             Return code
         End If
     End Function
+
+    Public Shared Function GetFcnName(code As String) As String
+        Dim p1 As Integer = code.IndexOf("(")
+        If p1 <> -1 Then
+            Return code.Substring(0, p1)
+        Else
+            Return code
+        End If
+    End Function
 End Class
