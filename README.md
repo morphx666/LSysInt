@@ -6,10 +6,10 @@ This is, in fact, a very rough and simple interpreter to render [L-system](https
 ![LSysInt rendering the Helge von Koch curve](https://xfx.net/stackoverflow/lsysint/LSysInt-VonKoch.png)
 
 The grammar is very similar to that of the more mature project [LILiS](https://github.com/Drup/LILiS), with a few distinctions:
-- A curve is defined using a name and enclosing its parameters between curcly braquets.
+- A curve is defined using a name with its body enclosed between curly brackets.
 - Parameters names must always end with a colon.
 - So far, only three parameters are supported:
-  - level: indicates the maximumn recursion level
+  - level: indicates the maximum recursion level
   - axiom: indicates the initial conditions
   - rule: indicates one or more rules to be applied to the axiom
 - Although LSysInt does not currently support "definitions", most of the time these can be represented through one or more rules.
