@@ -11,7 +11,7 @@ Public Class LDef
     Private mMaxLevel As Integer = 1
     Private mIterations As New List(Of Iteration)
 
-    Private startingAngle As Double = 0.0
+    Private defaultAngle As Double = 90.0
     Private offsetX As Integer = 0
     Private offsetY As Integer = 0
     Private startingLength As Double = 0.0
@@ -49,7 +49,7 @@ Public Class LDef
                             Dim tokens() As String = data.Split("=")
                             Rules.Add(New Rule(tokens(0).Trim(), tokens(1).Trim()))
                         Case "level:" : If Not Integer.TryParse(data, mMaxLevel) OrElse mMaxLevel < 1 Then mMaxLevel = 1
-                        Case "angle:" : Integer.TryParse(data, startingAngle)
+                        Case "angle:" : Integer.TryParse(data, defaultAngle)
                         Case "offsetX:" : Integer.TryParse(data, offsetX)
                         Case "offsetY:" : Integer.TryParse(data, offsetY)
                         Case "length:" : Integer.TryParse(data, startingLength)
@@ -87,7 +87,6 @@ Public Class LDef
     Public Sub Evaluate(initialVector As Vector)
         AbortIterations()
 
-        initialVector.Angle = startingAngle
         initialVector.Origin = New PointF(initialVector.Origin.X + offsetX, initialVector.Origin.Y + offsetY)
         initialVector.Magnitude += startingLength
 
@@ -137,7 +136,7 @@ Public Class LDef
                                             Next
                                         Next
 
-                                        mIterations.Add(New Iteration(newIter, initialVector))
+                                        mIterations.Add(New Iteration(newIter, initialVector, defaultAngle))
                                         Thread.Sleep(1)
 
                                         iter = newIter.ToList()

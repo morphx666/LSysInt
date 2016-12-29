@@ -11,24 +11,27 @@ Public Class Iteration
 
     Private execThread As Thread
     Private vStack As New Stack(Of Vector)
+    Private defaultAngle As Double = 90.0
 
     Public Event [Error](sender As Object, e As EventArgs)
     Public Event Done(sender As Object, e As EventArgs)
 
-    Public Sub New(instructions As String, initialVector As Vector)
+    Public Sub New(instructions As String, initialVector As Vector, defaultAngle As Double)
         Me.Instructions = instructions
         Me.Steps = instructions.Split(" ").ToList()
         Me.InitialVector = initialVector
+        Me.defaultAngle = defaultAngle
 
         execThread = New Thread(AddressOf Execute)
         execThread.IsBackground = True
         execThread.Start()
     End Sub
 
-    Public Sub New(instructions As List(Of String), initialVector As Vector)
+    Public Sub New(instructions As List(Of String), initialVector As Vector, defaultAngle As Double)
         Me.Instructions = Join(instructions.ToArray(), " ")
         Me.Steps = instructions.ToList()
         Me.InitialVector = initialVector
+        Me.defaultAngle = defaultAngle
 
         execThread = New Thread(AddressOf Execute)
         execThread.IsBackground = True
@@ -80,8 +83,8 @@ Public Class Iteration
                     Case "F" : If valIsValid Then v2.Move(val * v1.Magnitude) : pen = True
                     Case "B" : If valIsValid Then v2.Move(-val * v1.Magnitude) : pen = True
                     Case "f" : If valIsValid Then v2.Move(val * v1.Magnitude)
-                    Case "+" : If valIsValid Then v2.Angle += val Else v2.Angle += 90
-                    Case "-" : If valIsValid Then v2.Angle -= val Else v2.Angle -= 90
+                    Case "+" : If valIsValid Then v2.Angle += val Else v2.Angle += defaultAngle
+                    Case "-" : If valIsValid Then v2.Angle -= val Else v2.Angle -= defaultAngle
                     Case "[" : vStack.Push(New Vector(v2))
                     Case "]" : v2 = vStack.Pop() : Continue For
                     Case "%"
