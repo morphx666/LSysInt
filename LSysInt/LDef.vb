@@ -12,11 +12,12 @@ Public Class LDef
     Private mIterations As New List(Of Iteration)
 
     Private startingAngle As Double = 0.0
-    Private offsetX As Integer
-    Private offsetY As Integer
+    Private offsetX As Integer = 0
+    Private offsetY As Integer = 0
+    Private startingLength As Double = 0.0
 
     Private evalThread As Thread
-    Private internals() As String = {"axiom", "rule", "level", "angle", "offsetX", "offsetY"}
+    Private internals() As String = {"axiom", "rule", "level", "angle", "offsetX", "offsetY", "length"}
 
     Public Sub New(name As String, code As String)
         Me.Name = name
@@ -51,6 +52,7 @@ Public Class LDef
                         Case "angle:" : Integer.TryParse(data, startingAngle)
                         Case "offsetX:" : Integer.TryParse(data, offsetX)
                         Case "offsetY:" : Integer.TryParse(data, offsetY)
+                        Case "length:" : Integer.TryParse(data, startingLength)
                     End Select
                 End If
             Next
@@ -87,6 +89,7 @@ Public Class LDef
 
         initialVector.Angle = startingAngle
         initialVector.Origin = New PointF(initialVector.Origin.X + offsetX, initialVector.Origin.Y + offsetY)
+        initialVector.Magnitude += startingLength
 
         'evalThread = New Thread(Sub()
         '                            Dim iter As String = Axiom
