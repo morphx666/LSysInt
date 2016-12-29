@@ -1,4 +1,5 @@
-﻿Imports System.Threading
+﻿Imports System.Drawing
+Imports System.Threading
 
 Public Class LDef
     Public ReadOnly Property Name As String
@@ -10,8 +11,12 @@ Public Class LDef
     Private mMaxLevel As Integer = 1
     Private mIterations As New List(Of Iteration)
 
+    Private startingAngle As Double = 0.0
+    Private offsetX As Integer
+    Private offsetY As Integer
+
     Private evalThread As Thread
-    Private internals() As String = {"axiom", "rule", "level"}
+    Private internals() As String = {"axiom", "rule", "level", "angle", "offsetX", "offsetY"}
 
     Public Sub New(name As String, code As String)
         Me.Name = name
@@ -43,6 +48,9 @@ Public Class LDef
                             Dim tokens() As String = data.Split("=")
                             Rules.Add(New Rule(tokens(0).Trim(), tokens(1).Trim()))
                         Case "level:" : If Not Integer.TryParse(data, mMaxLevel) OrElse mMaxLevel < 1 Then mMaxLevel = 1
+                        Case "angle:" : Integer.TryParse(data, startingAngle)
+                        Case "offsetX:" : Integer.TryParse(data, offsetX)
+                        Case "offsetY:" : Integer.TryParse(data, offsetY)
                     End Select
                 End If
             Next
@@ -76,6 +84,9 @@ Public Class LDef
 
     Public Sub Evaluate(initialVector As Vector)
         AbortIterations()
+
+        initialVector.Angle = startingAngle
+        initialVector.Origin = New PointF(initialVector.Origin.X + offsetX, initialVector.Origin.Y + offsetY)
 
         'evalThread = New Thread(Sub()
         '                            Dim iter As String = Axiom
