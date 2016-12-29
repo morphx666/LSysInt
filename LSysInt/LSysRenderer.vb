@@ -69,7 +69,9 @@ Public Class LSysRenderer
         If mLDef IsNot Nothing Then
             If mCurrentIter < mLDef.Iterations.Count Then
                 For Each v In mLDef.Iterations(mCurrentIter).Vectors
-                    g.DrawLine(Pens.White, v.Origin, v.Destination)
+                    Using p As New Pen(v.Color)
+                        g.DrawLine(p, v.Origin, v.Destination)
+                    End Using
                 Next
             End If
 

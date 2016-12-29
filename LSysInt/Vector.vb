@@ -11,6 +11,7 @@ Public Class Vector
     Private mOrigin As PointF
     Private angleCos As Double = 1.0
     Private angleSin As Double = 0.0
+    Private mColor As Color = Color.White
 
     Public Event Changed(ByVal sender As Vector)
 
@@ -20,26 +21,32 @@ Public Class Vector
         mOrigin = New PointF(0, 0)
     End Sub
 
-    Public Sub New(ByVal magnitude As Double, ByVal angle As Double, ByVal origin As PointF)
+    Public Sub New(magnitude As Double, angle As Double, origin As PointF)
         mMagnitude = Math.Abs(magnitude)
         Me.Angle = angle
         If magnitude < 0 Then Me.Angle = mAngle + 180
         mOrigin = origin
     End Sub
 
-    Public Sub New(ByVal magnitude As Double, ByVal angle As Double, ByVal x As Double, ByVal y As Double)
+    Public Sub New(magnitude As Double, angle As Double, x As Double, y As Double)
         Me.New(magnitude, angle, New PointF(x, y))
     End Sub
 
-    Public Sub New(ByVal origin As PointF, ByVal destination As PointF)
+    Public Sub New(origin As PointF, destination As PointF)
         ResetVectorFromPoints(origin.X, origin.Y, destination.X, destination.Y)
     End Sub
 
-    Public Sub New(ByVal vector As Vector)
-        Me.New(vector.Magnitude, vector.Angle, vector.Origin)
+    Public Sub New(origin As PointF, destination As PointF, color As Color)
+        Me.New(origin, destination)
+        mColor = color
     End Sub
 
-    Public Property Origin() As PointF
+    Public Sub New(vector As Vector)
+        Me.New(vector.Magnitude, vector.Angle, vector.Origin)
+        mColor = vector.Color
+    End Sub
+
+    Public Property Origin As PointF
         Get
             Return mOrigin
         End Get
@@ -51,7 +58,7 @@ Public Class Vector
         End Set
     End Property
 
-    Public Property Destination() As PointF
+    Public Property Destination As PointF
         Get
             Return New PointF(X2, Y2)
         End Get
@@ -60,7 +67,7 @@ Public Class Vector
         End Set
     End Property
 
-    Public Property X1() As Double
+    Public Property X1 As Double
         Get
             Return mOrigin.X
         End Get
@@ -69,7 +76,7 @@ Public Class Vector
         End Set
     End Property
 
-    Public Property Y1() As Double
+    Public Property Y1 As Double
         Get
             Return mOrigin.Y
         End Get
@@ -78,7 +85,7 @@ Public Class Vector
         End Set
     End Property
 
-    Public Property X2() As Double
+    Public Property X2 As Double
         Get
             Return mOrigin.X + mMagnitude * angleCos
         End Get
@@ -87,7 +94,7 @@ Public Class Vector
         End Set
     End Property
 
-    Public Property Y2() As Double
+    Public Property Y2 As Double
         Get
             Return mOrigin.Y + mMagnitude * angleSin
         End Get
@@ -96,7 +103,7 @@ Public Class Vector
         End Set
     End Property
 
-    Public Property Magnitude() As Double
+    Public Property Magnitude As Double
         Get
             Return mMagnitude
         End Get
@@ -110,7 +117,7 @@ Public Class Vector
         End Set
     End Property
 
-    Public Property Angle() As Double
+    Public Property Angle As Double
         Get
             Return mAngle
         End Get
@@ -132,18 +139,27 @@ Public Class Vector
         End Set
     End Property
 
-    Public ReadOnly Property Slope() As Double
+    Public ReadOnly Property Slope As Double
         Get
             Return (Y2 - Y1) / (X2 - X1)
         End Get
     End Property
 
-    Public Sub Move(ByVal offset As Double)
+    Public Property Color As Color
+        Get
+            Return mColor
+        End Get
+        Set(value As Color)
+            mColor = value
+        End Set
+    End Property
+
+    Public Sub Move(offset As Double)
         Dim ov As Vector = New Vector(offset, mAngle, mOrigin)
         Origin = ov.Destination
     End Sub
 
-    Private Sub ResetVectorFromPoints(ByVal px1 As Double, ByVal py1 As Double, ByVal px2 As Double, ByVal py2 As Double)
+    Private Sub ResetVectorFromPoints(px1 As Double, py1 As Double, px2 As Double, py2 As Double)
         Dim v As Vector = Vector.VectorFromPoints(px1, py1, px2, py2)
 
         mMagnitude = v.Magnitude
@@ -151,7 +167,7 @@ Public Class Vector
         Angle = v.Angle
     End Sub
 
-    Private Shared Function VectorFromPoints(ByVal px1 As Double, ByVal py1 As Double, ByVal px2 As Double, ByVal py2 As Double) As Vector
+    Private Shared Function VectorFromPoints(px1 As Double, py1 As Double, px2 As Double, py2 As Double) As Vector
         Dim v As Vector = New Vector()
         Dim dx As Double = px2 - px1
         Dim dy As Double = py2 - py1
@@ -163,13 +179,13 @@ Public Class Vector
         Return v
     End Function
 
-    Public Shared Function Normalize(ByVal p1 As PointF, ByVal p2 As PointF) As Vector
+    Public Shared Function Normalize(p1 As PointF, p2 As PointF) As Vector
         Dim v As Vector = Vector.VectorFromPoints(p1.X, p1.Y, p2.X, p2.Y)
         v.Magnitude = 1
         Return v
     End Function
 
-    Private Shared Function fAtan(ByVal dx As Double, ByVal dy As Double) As Double
+    Private Shared Function fAtan(dx As Double, dy As Double) As Double
         Dim a As Double
 
         If dy = 0 Then
@@ -239,39 +255,39 @@ Public Class Vector
         ResetVectorFromPoints(xp1, yp1, p.X + d * Math.Cos(a), p.Y + d * Math.Sin(a))
     End Sub
 
-    Public Shared Operator =(ByVal v1 As Vector, ByVal v2 As Vector) As Boolean
+    Public Shared Operator =(v1 As Vector, v2 As Vector) As Boolean
         Return v1.Angle = v2.Angle AndAlso v1.Magnitude = v2.Magnitude
     End Operator
 
-    Public Shared Operator <>(ByVal v1 As Vector, ByVal v2 As Vector) As Boolean
+    Public Shared Operator <>(v1 As Vector, v2 As Vector) As Boolean
         Return Not (v1 = v2)
     End Operator
 
-    Public Shared Operator +(ByVal v1 As Vector, ByVal v2 As Vector) As Vector
+    Public Shared Operator +(v1 As Vector, v2 As Vector) As Vector
         Dim v3 As Vector = New Vector(v2)
         v3.Origin = v1.Destination
         Return New Vector(v1.Origin, v3.Destination)
     End Operator
 
-    Public Shared Operator -(ByVal v1 As Vector, ByVal v2 As Vector) As Vector
+    Public Shared Operator -(v1 As Vector, v2 As Vector) As Vector
         Dim v3 As Vector = New Vector(v2)
         v3.Origin = v1.Origin
         Return New Vector(v3.Destination, v1.Destination)
     End Operator
 
-    Public Shared Operator *(ByVal v1 As Vector, ByVal s As Double) As Vector
+    Public Shared Operator *(v1 As Vector, s As Double) As Vector
         Return New Vector(v1.Magnitude * s, v1.Angle, v1.Origin)
     End Operator
 
-    Public Shared Operator *(ByVal s As Double, ByVal v1 As Vector) As Vector
+    Public Shared Operator *(s As Double, v1 As Vector) As Vector
         Return v1 * s
     End Operator
 
-    Public Shared Operator /(ByVal v1 As Vector, ByVal s As Double) As Vector
+    Public Shared Operator /(v1 As Vector, s As Double) As Vector
         Return v1 * (1 / s)
     End Operator
 
-    Public Shared Operator ^(ByVal v1 As Vector, ByVal power As Double) As Double
+    Public Shared Operator ^(v1 As Vector, power As Double) As Double
         If power = 2 Then Return Vector.Dot(v1, v1)
         Return v1.Magnitude ^ power
     End Operator
@@ -283,7 +299,7 @@ Public Class Vector
         Return v1.Magnitude * v2.Magnitude * Math.Cos(a * toRad)
     End Function
 
-    Public Shared Function Cross(ByVal v1 As Vector, ByVal v2 As Vector) As Double
+    Public Shared Function Cross(v1 As Vector, v2 As Vector) As Double
         Dim Rx As Double = v1.X2 - v1.X1
         Dim Ry As Double = v1.Y2 - v1.Y1
 
@@ -293,26 +309,26 @@ Public Class Vector
         Return Rx * Ty - Ry * Tx
     End Function
 
-    Public Shared Function Cross(ByVal v1 As Vector, ByVal s As Double) As Vector
+    Public Shared Function Cross(v1 As Vector, s As Double) As Vector
         'Dim v As Vector = New Vector(v1.Origin, New PointF(v1.x1 + -s * v1.y2, v1.y1 + s * v1.x2))
         Dim v As Vector = New Vector(v1.Origin, New PointF(v1.X1 + -s * (v1.Y2 - v1.Y1), v1.Y1 + s * (v1.X2 - v1.X1)))
         'Dim v As Vector = New Vector(v1.Origin, New PointF(-s * v1.y1, s * v1.x1))
         Return v
     End Function
 
-    Public Shared Function Cross(ByVal s As Double, ByVal v1 As Vector) As Vector
+    Public Shared Function Cross(s As Double, v1 As Vector) As Vector
         Return Vector.Cross(v1, s)
     End Function
 
-    Public Shared Function Distance(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double) As Double
+    Public Shared Function Distance(x1 As Double, y1 As Double, x2 As Double, y2 As Double) As Double
         Return Distance(x2 - x1, y2 - y1)
     End Function
 
-    Public Shared Function Distance(ByVal dx As Double, ByVal dy As Double) As Double
+    Public Shared Function Distance(dx As Double, dy As Double) As Double
         Return Math.Sqrt(dx ^ 2 + dy ^ 2)
     End Function
 
-    Public Shared Function Distance(ByVal p1 As PointF, ByVal p2 As PointF) As Double
+    Public Shared Function Distance(p1 As PointF, p2 As PointF) As Double
         Return Distance(p1.X, p1.Y, p2.X, p2.Y)
     End Function
 

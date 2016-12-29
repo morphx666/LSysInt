@@ -2,26 +2,50 @@
     Public ReadOnly Property LDefs As New List(Of LDef)
 
     Public Sub New(code As String)
+        ' Remove all parameters spaces, as this breaks the parser
+        ' Note to self: improve the parser!
+        Dim newCode As String = ""
         For i As Integer = 0 To code.Length - 1
-            If code(i) = "{" Then
-                Dim defName As String = FindPreviousWord(code, i)
+            newCode += code(i)
+
+            If code(i) = "(" Then
                 For j As Integer = i + 1 To code.Length - 1
-                    If Char.IsLetterOrDigit(code(j)) Then
-                        For k = j + 1 To code.Length - 1
-                            If code(k) = "}" Then
-                                LDefs.Add(New LDef(defName, code.Substring(j, k - j)))
-                                j = code.Length
-                                i = k
-                                Exit For
-                            End If
-                        Next
-                    ElseIf code(j) = "}" Then
-                        LDefs.Add(New LDef(defName, code.Substring(j, j - i - 1)))
-                        Exit For
-                    End If
+                    Select Case code(j)
+                        Case " "
+                        Case ")" : newCode += code(j) : i = j : Exit For
+                        Case Else : newCode += code(j)
+                    End Select
                 Next
             End If
         Next
+        While newCode.Contains("  ")
+            newCode = newCode.Replace("  ", " ")
+        End While
+        code = newCode
+
+        Try
+            For i As Integer = 0 To code.Length - 1
+                If code(i) = "{" Then
+                    Dim defName As String = FindPreviousWord(code, i)
+                    For j As Integer = i + 1 To code.Length - 1
+                        If Char.IsLetterOrDigit(code(j)) Then
+                            For k = j + 1 To code.Length - 1
+                                If code(k) = "}" Then
+                                    LDefs.Add(New LDef(defName, code.Substring(j, k - j)))
+                                    j = code.Length
+                                    i = k
+                                    Exit For
+                                End If
+                            Next
+                        ElseIf code(j) = "}" Then
+                            LDefs.Add(New LDef(defName, code.Substring(j, j - i - 1)))
+                            Exit For
+                        End If
+                    Next
+                End If
+            Next
+        Catch ex As Exception
+        End Try
     End Sub
 
     Private Function FindPreviousWord(code As String, i As Integer) As String

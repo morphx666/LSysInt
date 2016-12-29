@@ -1,5 +1,5 @@
 ﻿Public Class Rule
-    Public ReadOnly Property Variable As String
+    Public ReadOnly Property Variables As New List(Of String)
     Public ReadOnly Property FunctionName As String
     Public ReadOnly Property Transform As String
 
@@ -22,10 +22,12 @@
     Dim ev As New Evaluator()
 
     Public Sub New(fcn As String, transform As String)
-        Me.Variable = GetFcnPrm(fcn)
-        If Me.Variable = fcn Then
+        Dim vars As String = GetFcnPrm(fcn)
+        If vars = fcn Then
             Me.FunctionName = ""
+            Me.Variables.Add(vars)
         Else
+            Me.Variables = vars.Split(",").ToList()
             Me.FunctionName = fcn.Substring(0, fcn.IndexOf("("))
         End If
 
@@ -43,12 +45,23 @@
             Try
                 If token.Contains("(") Then
                     If token.StartsWith($"{FunctionName}(") Then
-                        ev.Formula = GetFcnPrm(token)
-                        Return New ApplyResult(Transform.Replace(Variable, ev.Evaluate()), ApplyResult.ResultStatus.OK)
+                        Dim pr As String() = GetFcnPrm(token).Split(",")
+                        If pr.Length = Variables.Count Then
+                            Dim tx As String = Transform
+                            For i As Integer = 0 To Variables.Count - 1
+                                If i = pr.Length Then Exit For
+                                Dim var As String = Variables(i)
+                                ev.Formula = pr(i)
+                                tx = tx.Replace(var, ev.Evaluate())
+                            Next
+                            Return New ApplyResult(tx, ApplyResult.ResultStatus.OK)
+                        Else
+                            Return New ApplyResult(token, ApplyResult.ResultStatus.OK)
+                        End If
                     Else
                         Return New ApplyResult(token, ApplyResult.ResultStatus.Ignore)
                     End If
-                ElseIf token = Variable Then
+                ElseIf Variables.Contains(token) Then
                     Return New ApplyResult(Transform, ApplyResult.ResultStatus.OK)
                 Else
                     Return New ApplyResult(token, ApplyResult.ResultStatus.Ignore)

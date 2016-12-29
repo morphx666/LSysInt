@@ -46,38 +46,55 @@ Public Class Iteration
         Dim pen As Boolean = True
         Dim v1 As New Vector(InitialVector)
         Dim v2 As New Vector(v1)
+        Dim val As Double
+        Dim valIsValid As Boolean
 
         'Dim v As Vector = Nothing
         'While Not mVectors.IsEmpty
         '    mVectors.TryTake(v)
         'End While
 
-        Try
-            For Each s In Steps
-                ev.Formula = Rule.GetFcnPrm(s)
-                pen = False
+        For Each s In Steps
+            ev.Formula = Rule.GetFcnPrm(s)
+            Try
+                valIsValid = True
+                val = ev.Evaluate()
+            Catch
+                valIsValid = False
+                'RaiseEvent [Error](Me, New EventArgs)
+            End Try
+            pen = False
 
+            Try
                 Select Case s(0)
-                    Case "F" : v2.Move(ev.Evaluate() * v1.Magnitude) : pen = True
-                    Case "B" : v2.Move(-ev.Evaluate() * v1.Magnitude) : pen = True
-                    Case "f" : v2.Move(ev.Evaluate() * v1.Magnitude)
-                    Case "+" : v2.Angle += ev.Evaluate()
-                    Case "-" : v2.Angle -= ev.Evaluate()
+                    Case "F" : If valIsValid Then v2.Move(val * v1.Magnitude) : pen = True
+                    Case "B" : If valIsValid Then v2.Move(-val * v1.Magnitude) : pen = True
+                    Case "f" : If valIsValid Then v2.Move(val * v1.Magnitude)
+                    Case "+" : If valIsValid Then v2.Angle += val
+                    Case "-" : If valIsValid Then v2.Angle -= val
                     Case "[" : vStack.Push(New Vector(v2))
                     Case "]" : v2 = vStack.Pop() : Continue For
+                    Case "%"
+                        Dim vs() As String = Rule.GetFcnPrm(s).Split(",")
+                        Dim v(vs.Length - 1) As Double
+                        For i As Integer = 0 To vs.Length - 1
+                            ev.Formula = vs(i)
+                            v(i) = ev.Evaluate() * 255
+                        Next
+                        v2.Color = Drawing.Color.FromArgb(v(3), v(0), v(1), v(2))
                     Case Else ' Ignore unprocessed statement
                         Thread.Sleep(1)
                 End Select
 
-                If pen Then mVectors.Add(New Vector(v1.Origin, v2.Origin))
+                If pen Then mVectors.Add(New Vector(v1.Origin, v2.Origin, v2.Color))
 
                 v1 = New Vector(v2)
-            Next
-        Catch ex As Exception
-            RaiseEvent [Error](Me, New EventArgs)
-        Finally
-            mIsDone = True
-            RaiseEvent Done(Me, New EventArgs)
-        End Try
+            Catch ex As Exception
+                RaiseEvent [Error](Me, New EventArgs)
+            End Try
+        Next
+
+        mIsDone = True
+        RaiseEvent Done(Me, New EventArgs)
     End Sub
 End Class

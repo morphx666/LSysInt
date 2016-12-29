@@ -58,9 +58,26 @@ Public Class FormMain
     rule: *    = * -(45)
 }"))
 
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("VonKochColor",
+"VonKochColor {
+    level: 5
+    axiom: -(90) f(0.28) +(90) f(0.05) F(0.9,0,0.9)
+    rule: F(x,d,k) =
+                    F(x)
+                    C(d)         F(x/3, d,         k/4)    +(60)
+                    C(d + k/4)   F(x/3, d + k/4,   k/4)   -(120)
+                    C(d + k/2)   F(x/3, d + k/2,   k/4)    +(60)
+                    C(d + 3/4*k) F(x/3, d + 3/4*k, k/4)
+    rule: C(d) = %(0,d,0.1,1)
+}"))
+
         updateCodeTimer = New Timer(New TimerCallback(Sub()
                                                           lsys = New LSysInt.LSysInt(TextBoxCode.Text)
-                                                          LSysRendererCtrl.LDef = lsys.LDefs(0)
+                                                          If lsys.LDefs.Any() Then
+                                                              LSysRendererCtrl.LDef = lsys.LDefs(0)
+                                                          Else
+                                                              LSysRendererCtrl.LDef = Nothing
+                                                          End If
                                                       End Sub),
                                                 Nothing,
                                                 Timeout.Infinite,
