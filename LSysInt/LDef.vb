@@ -49,7 +49,7 @@ Public Class LDef
                             Dim tokens() As String = data.Split("=")
                             Rules.Add(New Rule(tokens(0).Trim(), tokens(1).Trim()))
                         Case "level:" : If Not Integer.TryParse(data, mMaxLevel) OrElse mMaxLevel < 1 Then mMaxLevel = 1
-                        Case "angle:" : Integer.TryParse(data, defaultAngle)
+                        Case "angle:" : double.TryParse(data, defaultAngle)
                         Case "offsetX:" : Integer.TryParse(data, offsetX)
                         Case "offsetY:" : Integer.TryParse(data, offsetY)
                         Case "length:" : Integer.TryParse(data, startingLength)
@@ -89,31 +89,6 @@ Public Class LDef
 
         initialVector.Origin = New PointF(initialVector.Origin.X + offsetX, initialVector.Origin.Y + offsetY)
         initialVector.Magnitude += startingLength
-
-        'evalThread = New Thread(Sub()
-        '                            Dim iter As String = Axiom
-        '                            Dim newIter As String = ""
-        '                            Dim ar As Rule.ApplyResult
-
-        '                            ' FIXME: This code is horrendously slow!
-        '                            For i As Integer = 1 To mMaxLevel
-        '                                newIter = ""
-
-        '                                For Each token In iter.Split(" ")
-        '                                    newIter += token + " "
-        '                                    For Each rule In Rules
-        '                                        ar = rule.Apply(token)
-        '                                        If ar.Status = Rule.ApplyResult.ResultStatus.OK Then newIter = newIter.Replace(token, ar.Result)
-        '                                    Next
-        '                                Next
-
-        '                                newIter = newIter.Trim()
-        '                                mIterations.Add(New Iteration(newIter, initialVector))
-        '                                Thread.Sleep(1)
-
-        '                                iter = newIter
-        '                            Next
-        '                        End Sub)
 
         evalThread = New Thread(Sub()
                                     Dim iter As List(Of String) = Axiom.Split(" ").ToList()
