@@ -22,16 +22,19 @@ Public Class LSysRenderer
                                           Thread.Sleep(delay)
                                           Me.Invalidate()
 
-                                          counter += 1
-                                          If counter = 5 Then
-                                              If mLDef?.Iterations.Count > mCurrentIter AndAlso mLDef.Iterations(mCurrentIter).IsDone Then
-                                                  If mCurrentIter = mLDef.Iterations.Count - 1 Then Thread.Sleep(1000)
+                                          Try
+                                              counter += 1
+                                              If counter = 5 Then
+                                                  counter = 0
+                                                  If mLDef?.Iterations.Count > mCurrentIter AndAlso mLDef.Iterations(mCurrentIter).IsDone Then
+                                                      If mCurrentIter = mLDef?.Iterations.Count - 1 Then Thread.Sleep(1000)
 
-                                                  mCurrentIter += 1
-                                                  mCurrentIter = mCurrentIter Mod mLDef.Iterations.Count
+                                                      mCurrentIter += 1
+                                                      mCurrentIter = mCurrentIter Mod mLDef?.Iterations.Count
+                                                  End If
                                               End If
-                                              counter = 0
-                                          End If
+                                          Catch
+                                          End Try
                                       Loop
                                   End Sub)
         renderThread.IsBackground = True
@@ -76,7 +79,7 @@ Public Class LSysRenderer
             End If
 
             g.ResetTransform()
-            g.DrawString($"Iteration: {mCurrentIter + 1}/{mLDef.MaxLevel}", Me.Font, Brushes.White, 10, 10)
+            g.DrawString($"Iteration: {mCurrentIter + 1}/{mLDef?.MaxLevel}", Me.Font, Brushes.White, 10, 10)
         End If
     End Sub
 End Class

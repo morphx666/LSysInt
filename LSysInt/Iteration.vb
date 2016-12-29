@@ -25,6 +25,16 @@ Public Class Iteration
         execThread.Start()
     End Sub
 
+    Public Sub New(instructions As List(Of String), initialVector As Vector)
+        Me.Instructions = Join(instructions.ToArray(), " ")
+        Me.Steps = instructions.ToList()
+        Me.InitialVector = initialVector
+
+        execThread = New Thread(AddressOf Execute)
+        execThread.IsBackground = True
+        execThread.Start()
+    End Sub
+
     Public ReadOnly Property Vectors As ConcurrentBag(Of Vector)
         Get
             Return mVectors

@@ -14,7 +14,8 @@ Public Class LDef
     Private internals() As String = {"axiom", "rule", "level"}
 
     Public Sub New(name As String, code As String)
-        name = name
+        Me.Name = name
+        Me.Axiom = ""
 
         Dim data As String = ""
 
@@ -37,7 +38,7 @@ Public Class LDef
                     Next
 
                     Select Case internal
-                        Case "axiom:" : Axiom = data
+                        Case "axiom:" : Axiom = data.Trim()
                         Case "rule:"
                             Dim tokens() As String = data.Split("=")
                             Rules.Add(New Rule(tokens(0).Trim(), tokens(1).Trim()))
@@ -76,28 +77,56 @@ Public Class LDef
     Public Sub Evaluate(initialVector As Vector)
         AbortIterations()
 
+        'evalThread = New Thread(Sub()
+        '                            Dim iter As String = Axiom
+        '                            Dim newIter As String = ""
+        '                            Dim ar As Rule.ApplyResult
+
+        '                            ' FIXME: This code is horrendously slow!
+        '                            For i As Integer = 1 To mMaxLevel
+        '                                newIter = ""
+
+        '                                For Each token In iter.Split(" ")
+        '                                    newIter += token + " "
+        '                                    For Each rule In Rules
+        '                                        ar = rule.Apply(token)
+        '                                        If ar.Status = Rule.ApplyResult.ResultStatus.OK Then newIter = newIter.Replace(token, ar.Result)
+        '                                    Next
+        '                                Next
+
+        '                                newIter = newIter.Trim()
+        '                                mIterations.Add(New Iteration(newIter, initialVector))
+        '                                Thread.Sleep(1)
+
+        '                                iter = newIter
+        '                            Next
+        '                        End Sub)
+
         evalThread = New Thread(Sub()
-                                    Dim iter As String = Axiom
-                                    Dim newIter As String = ""
+                                    Dim iter As List(Of String) = Axiom.Split(" ").ToList()
+                                    Dim newIter As New List(Of String)
                                     Dim ar As Rule.ApplyResult
+                                    Dim tmp As String = ""
 
-                                    ' FIXME: This code is horrendously slow!
                                     For i As Integer = 1 To mMaxLevel
-                                        newIter = ""
+                                        newIter.Clear()
 
-                                        For Each token In iter.Split(" ")
-                                            newIter += token + " "
+                                        For Each token In iter
+                                            If token = "" Then Continue For
+                                            newIter.Add(token)
                                             For Each rule In Rules
                                                 ar = rule.Apply(token)
-                                                If ar.Status = Rule.ApplyResult.ResultStatus.OK Then newIter = newIter.Replace(token, ar.Result)
+                                                If ar.Status = Rule.ApplyResult.ResultStatus.OK Then
+                                                    newIter.RemoveAt(newIter.Count - 1)
+                                                    newIter.AddRange(ar.Result.Split(" "))
+                                                End If
                                             Next
                                         Next
 
-                                        newIter = newIter.Trim()
                                         mIterations.Add(New Iteration(newIter, initialVector))
                                         Thread.Sleep(1)
 
-                                        iter = newIter
+                                        iter = newIter.ToList()
                                     Next
                                 End Sub)
         evalThread.IsBackground = True
