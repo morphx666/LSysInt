@@ -27,7 +27,7 @@ Here's a sample code to render the dragon curve up to its 13th iteration:
   
 ```
     Dragon {
-        level: 11
+        level: 13
         axiom: -(45) f(0.47) * F(0.6) X(0.6)
         rule: X(n) = X(n/Sqrt(2)) +(90) Y(n/Sqrt(2)) F(n/Sqrt(2)) +(90)
         rule: Y(n) = -(90) F(n/Sqrt(2)) X(n/Sqrt(2)) -(90) Y(n/Sqrt(2))
