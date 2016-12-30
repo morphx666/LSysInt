@@ -2,9 +2,18 @@
 Imports System.Threading
 
 Public Class LDef
+    Public Structure Constant
+        Public ReadOnly Property Name As String
+        Public ReadOnly Property Value As String
+
+        Public Sub New(name As String, value As String)
+            Me.Name = name
+            Me.Value = value
+        End Sub
+    End Structure
+
     Public ReadOnly Property Name As String
-    Public ReadOnly Property Variables As New List(Of String)
-    Public ReadOnly Property Constants As New List(Of String)
+    Public ReadOnly Property Constants As New List(Of Constant)
     Public ReadOnly Property Axiom As String
     Public ReadOnly Property Rules As New List(Of Rule)
 
@@ -17,7 +26,7 @@ Public Class LDef
     Private startingLength As Double = 0.0
 
     Private evalThread As Thread
-    Private internals() As String = {"axiom", "rule", "level", "angle", "offsetX", "offsetY", "length"}
+    Private internals() As String = {"axiom", "rule", "level", "angle", "offsetX", "offsetY", "length", "constant"}
 
     Public Sub New(name As String, code As String)
         Me.Name = name
@@ -49,10 +58,13 @@ Public Class LDef
                             Dim tokens() As String = data.Split("=")
                             Rules.Add(New Rule(tokens(0).Trim(), tokens(1).Trim()))
                         Case "level:" : If Not Integer.TryParse(data, mMaxLevel) OrElse mMaxLevel < 1 Then mMaxLevel = 1
-                        Case "angle:" : double.TryParse(data, defaultAngle)
+                        Case "angle:" : Double.TryParse(data, defaultAngle)
                         Case "offsetX:" : Integer.TryParse(data, offsetX)
                         Case "offsetY:" : Integer.TryParse(data, offsetY)
                         Case "length:" : Integer.TryParse(data, startingLength)
+                        Case "constant:"
+                            Dim tokens() As String = data.Split("=")
+                            Constants.Add(New Constant(tokens(0).Trim(), tokens(1).Trim()))
                     End Select
                 End If
             Next
@@ -90,6 +102,8 @@ Public Class LDef
         initialVector.Origin = New PointF(initialVector.Origin.X + offsetX, initialVector.Origin.Y + offsetY)
         initialVector.Magnitude += startingLength
 
+
+
         evalThread = New Thread(Sub()
                                     Dim iter As List(Of String) = Axiom.Split(" ").ToList()
                                     Dim newIter As New List(Of String)
@@ -111,10 +125,16 @@ Public Class LDef
                                             Next
                                         Next
 
+                                        iter = newIter.ToList()
+
+                                        For Each c In Constants
+                                            For n As Integer = 0 To newIter.Count - 1
+                                                newIter(n) = newIter(n).Replace(c.Name, c.Value)
+                                            Next
+                                        Next
+
                                         mIterations.Add(New Iteration(newIter, initialVector, defaultAngle))
                                         Thread.Sleep(1)
-
-                                        iter = newIter.ToList()
                                     Next
                                 End Sub)
         evalThread.IsBackground = True

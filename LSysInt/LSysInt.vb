@@ -1,8 +1,10 @@
-﻿Public Class LSysInt
+﻿' http://algorithmicbotany.org/papers/abop/abop-ch1.pdf
+
+Public Class LSysInt
     Public ReadOnly Property LDefs As New List(Of LDef)
 
     Public Sub New(code As String)
-        ' Remove all parameters spaces, as this breaks the parser
+        ' Remove all spaces from all functions' parameters, otherwise it breaks the parser
         ' Note to self: improve the parser!
         Dim newCode As String = ""
         For i As Integer = 0 To code.Length - 1
