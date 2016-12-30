@@ -23,8 +23,8 @@ Partial Class FormMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.SplitContainerMain = New System.Windows.Forms.SplitContainer()
-        Me.TextBoxCode = New System.Windows.Forms.TextBox()
         Me.ComboBoxLSysCodeDefs = New System.Windows.Forms.ComboBox()
+        Me.TextBoxCode = New System.Windows.Forms.TextBox()
         Me.LSysRendererCtrl = New LSysInt.LSysRenderer()
         CType(Me.SplitContainerMain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainerMain.Panel1.SuspendLayout()
@@ -50,6 +50,21 @@ Partial Class FormMain
         Me.SplitContainerMain.SplitterDistance = 303
         Me.SplitContainerMain.TabIndex = 1
         '
+        'ComboBoxLSysCodeDefs
+        '
+        Me.ComboBoxLSysCodeDefs.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBoxLSysCodeDefs.BackColor = System.Drawing.Color.FromArgb(CType(CType(33, Byte), Integer), CType(CType(33, Byte), Integer), CType(CType(33, Byte), Integer))
+        Me.ComboBoxLSysCodeDefs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxLSysCodeDefs.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ComboBoxLSysCodeDefs.ForeColor = System.Drawing.Color.WhiteSmoke
+        Me.ComboBoxLSysCodeDefs.FormattingEnabled = True
+        Me.ComboBoxLSysCodeDefs.Location = New System.Drawing.Point(1, 0)
+        Me.ComboBoxLSysCodeDefs.Margin = New System.Windows.Forms.Padding(0)
+        Me.ComboBoxLSysCodeDefs.Name = "ComboBoxLSysCodeDefs"
+        Me.ComboBoxLSysCodeDefs.Size = New System.Drawing.Size(302, 22)
+        Me.ComboBoxLSysCodeDefs.TabIndex = 1
+        '
         'TextBoxCode
         '
         Me.TextBoxCode.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -66,22 +81,6 @@ Partial Class FormMain
         Me.TextBoxCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TextBoxCode.Size = New System.Drawing.Size(303, 544)
         Me.TextBoxCode.TabIndex = 0
-        '
-        'ComboBoxLSysCodeDefs
-        '
-        Me.ComboBoxLSysCodeDefs.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBoxLSysCodeDefs.BackColor = System.Drawing.Color.FromArgb(CType(CType(33, Byte), Integer), CType(CType(33, Byte), Integer), CType(CType(33, Byte), Integer))
-        Me.ComboBoxLSysCodeDefs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBoxLSysCodeDefs.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBoxLSysCodeDefs.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ComboBoxLSysCodeDefs.ForeColor = System.Drawing.Color.WhiteSmoke
-        Me.ComboBoxLSysCodeDefs.FormattingEnabled = True
-        Me.ComboBoxLSysCodeDefs.Location = New System.Drawing.Point(1, 0)
-        Me.ComboBoxLSysCodeDefs.Margin = New System.Windows.Forms.Padding(0)
-        Me.ComboBoxLSysCodeDefs.Name = "ComboBoxLSysCodeDefs"
-        Me.ComboBoxLSysCodeDefs.Size = New System.Drawing.Size(302, 23)
-        Me.ComboBoxLSysCodeDefs.TabIndex = 1
         '
         'LSysRendererCtrl
         '

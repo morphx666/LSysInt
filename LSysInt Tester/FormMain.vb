@@ -19,7 +19,7 @@ Public Class FormMain
     End Class
 
     Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("VonKochSimple",
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Von Koch Simple",
 "VonKochSimple {
     level: 5
     axiom: -(90) f(0.5) +(90) F(1)
@@ -36,7 +36,7 @@ Public Class FormMain
                  +(25) F(x/2) [ +(25) F(x/2) X(x/2) ] -(25) X(x/2)
 }"))
 
-        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("SpinIt",
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Spin It",
 "SpinIt {
     level: 60
     axiom: -(90) f(0.5) +(90) f(0.5) X(0.01)
@@ -48,7 +48,7 @@ Public Class FormMain
                        -(90) F(n) ]
 }"))
 
-        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Dragon",
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Dragon Curve",
 "Dragon {
     level: 11
     axiom: -(45) f(0.47) * F(0.6) X(0.6)
@@ -58,7 +58,7 @@ Public Class FormMain
     rule: *    = * -(45)
 }"))
 
-        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("VonKochColor",
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Von Koch Color (not working ATM)",
 "VonKochColor {
     level: 5
     axiom: -(90) f(0.28) +(90) f(0.05) F(0.9,0,0.9)
@@ -69,6 +69,18 @@ Public Class FormMain
                     C(d + k/2)   F(x/3, d + k/2,   k/4)    +(60)
                     C(d + 3/4*k) F(x/3, d + 3/4*k, k/4)
     rule: C(d) = %(0,d,0.1,1)
+}"))
+
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Sierpinski Triangle",
+"SierpinskiTriangle  {
+    level: 5
+    angle: 60
+    offsetY: -800
+    constant: A = F
+    constant: B = F
+    axiom: %(0,0.8,1,1) A(0.03)
+    rule: A(x) = + B(x) - A(x) - B(x) +
+    rule: B(x) = - A(x) + B(x) + A(x) - 
 }"))
 
         updateCodeTimer = New Timer(New TimerCallback(Sub()
