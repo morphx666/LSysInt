@@ -84,6 +84,12 @@ Public Class FormMain
                                                 Timeout.Infinite)
 
         AddHandler TextBoxCode.TextChanged, Sub() updateCodeTimer.Change(500, Timeout.Infinite)
+        AddHandler TextBoxCode.PreviewKeyDown, Sub(s1 As Object, e1 As PreviewKeyDownEventArgs)
+                                                   Select Case e1.KeyCode
+                                                       Case Keys.Tab : e1.IsInputKey = True
+                                                       Case Keys.A : If e1.KeyData And Keys.Control Then TextBoxCode.SelectAll()
+                                                   End Select
+                                               End Sub
         AddHandler ComboBoxLSysCodeDefs.SelectedIndexChanged, Sub()
                                                                   TextBoxCode.Text = CType(ComboBoxLSysCodeDefs.SelectedItem, LSysCodeDef).Code
                                                                   TextBoxCode.SelectionStart = 0
