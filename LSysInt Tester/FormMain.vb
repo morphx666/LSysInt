@@ -83,6 +83,23 @@ Public Class FormMain
     rule: B(x) = - A(x) + B(x) + A(x) - 
 }"))
 
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Rectangular Wave",
+"RectWave {
+    level: 4
+    axiom: - f(0.0)
+           F(0.1) + F(0.1) + F(0.1) + F(0.1)
+    rule: F(x) = F(x/2) + F(x/2) - F(x/2) - F(x/2) F(x/2) +
+                 F(x/2) + F(x/2) - F(x/2)
+}"))
+
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Simple Maze",
+"SimpleMaze {
+    level: 3
+    axiom: f(0.5)
+           F(0.2) + F(0.2) + F(0.2) + F(0.2)
+    rule: F(x) = F(x/2) F(x/2) + F(x/2) - F(x/2) + F(x/2) + F(x/2) F(x/2)
+}"))
+
         updateCodeTimer = New Timer(New TimerCallback(Sub()
                                                           lsys = New LSysInt.LSysInt(TextBoxCode.Text)
                                                           If lsys.LDefs.Any() Then
