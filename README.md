@@ -9,9 +9,14 @@ The grammar is very similar to that of the more mature project [LILiS](https://g
 - A curve is defined using a name with its body enclosed between curly brackets.
 - Parameters names must always end with a colon.
 - So far, only three parameters are supported:
-  - level: indicates the maximum recursion level
-  - axiom: indicates the initial conditions
-  - rule: indicates one or more rules to be applied to the axiom
+  - **level**: indicates the maximum recursion level
+  - **axiom**: indicates the initial conditions
+  - **rule**: indicates one or more rules to be applied to the axiom
+  - **angle**: defines the default angle when none is specified
+  - **offsetX**: defines a rendering origin offset in the horizontal direction
+  - **offsetY**: defines a rendering origin offset in the horizontal direction
+  - **length**: defines the default length of a segment when none is specified
+  - **constant**: defines a simple string-based substitution (no function support yet)
 - Although LSysInt does not currently support "definitions", most of the time these can be represented through one or more rules.
 - These are the currently supported internal functions:
   - **F(x)**: move forward and draw `x` amount of pixels
