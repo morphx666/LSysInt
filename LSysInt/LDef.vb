@@ -23,7 +23,7 @@ Public Class LDef
     Private defaultAngle As Double = 90.0
     Private offsetX As Integer = 0
     Private offsetY As Integer = 0
-    Private startingLength As Double = 0.0
+    Private defaultLength As Double = 1.0
 
     Private evalThread As Thread
     Private internals() As String = {"axiom", "rule", "level", "angle", "offsetX", "offsetY", "length", "constant"}
@@ -61,7 +61,7 @@ Public Class LDef
                         Case "angle:" : Double.TryParse(data, defaultAngle)
                         Case "offsetX:" : Integer.TryParse(data, offsetX)
                         Case "offsetY:" : Integer.TryParse(data, offsetY)
-                        Case "length:" : Integer.TryParse(data, startingLength)
+                        Case "length:" : Double.TryParse(data, defaultLength)
                         Case "constant:"
                             Dim tokens() As String = data.Split("=")
                             Constants.Add(New Constant(tokens(0).Trim(), tokens(1).Trim()))
@@ -100,9 +100,7 @@ Public Class LDef
         AbortIterations()
 
         initialVector.Origin = New PointF(initialVector.Origin.X + offsetX, initialVector.Origin.Y + offsetY)
-        initialVector.Magnitude += startingLength
-
-
+        initialVector.Magnitude += defaultLength
 
         evalThread = New Thread(Sub()
                                     Dim iter As List(Of String) = Axiom.Split(" ").ToList()
@@ -133,7 +131,7 @@ Public Class LDef
                                             Next
                                         Next
 
-                                        mIterations.Add(New Iteration(newIter, initialVector, defaultAngle))
+                                        mIterations.Add(New Iteration(newIter, initialVector, defaultLength, defaultAngle))
                                         Thread.Sleep(1)
                                     Next
                                 End Sub)
