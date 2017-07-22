@@ -21,8 +21,8 @@ Public Class LDef
     Private mIterations As New List(Of Iteration)
 
     Private defaultAngle As Double = 90.0
-    Private offsetX As Integer = 0
-    Private offsetY As Integer = 0
+    Private offsetX As Double = 0
+    Private offsetY As Double = 0
     Private defaultLength As Double = 1.0
 
     Private evalThread As Thread
@@ -59,8 +59,8 @@ Public Class LDef
                             Rules.Add(New Rule(tokens(0).Trim(), tokens(1).Trim()))
                         Case "level:" : If Not Integer.TryParse(data, mMaxLevel) OrElse mMaxLevel < 1 Then mMaxLevel = 1
                         Case "angle:" : Double.TryParse(data, defaultAngle)
-                        Case "offsetX:" : Integer.TryParse(data, offsetX)
-                        Case "offsetY:" : Integer.TryParse(data, offsetY)
+                        Case "offsetX:" : Double.TryParse(data, offsetX)
+                        Case "offsetY:" : Double.TryParse(data, offsetY)
                         Case "length:" : Double.TryParse(data, defaultLength)
                         Case "constant:"
                             Dim tokens() As String = data.Split("=")

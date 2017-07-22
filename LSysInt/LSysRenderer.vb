@@ -55,7 +55,7 @@ Public Class LSysRenderer
     Private Sub Start()
         mCurrentIter = 0
         If mLDef IsNot Nothing Then
-            Dim len As Double = 800.0
+            Dim len As Double = 100
             mLDef.Evaluate(New Vector(len, 0, New PointF(-len / 2, len / 2)))
         End If
     End Sub

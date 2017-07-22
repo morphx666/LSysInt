@@ -73,12 +73,13 @@ Public Class FormMain
 
         ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Sierpinski Triangle",
 "SierpinskiTriangle  {
-    level: 5
+    level: 7
     angle: 60
+    offsetX: -80
     offsetY: -800
     constant: A = F
     constant: B = F
-    axiom: %(0,0.8,1,1) A(0.03)
+    axiom: %(0,0.8,1,1) A(0.01)
     rule: A(x) = + B(x) - A(x) - B(x) +
     rule: B(x) = - A(x) + B(x) + A(x) - 
 }"))
@@ -98,6 +99,15 @@ Public Class FormMain
     axiom: f(0.5)
            F(0.2) + F(0.2) + F(0.2) + F(0.2)
     rule: F(x) = F(x/2) F(x/2) + F(x/2) - F(x/2) + F(x/2) + F(x/2) F(x/2)
+}"))
+
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Hilbert's Curve",
+"HilbertCurve {
+    level: 5
+
+    axiom: A(0.1)
+    rule: A(n) = - K(n) F(n) + A(n) F(n) A(n) + F(n) K(n) -
+    rule: K(n) = + A(n) F(n) - K(n) F(n) K(n) - F(n) A(n) +
 }"))
 
         updateCodeTimer = New Timer(New TimerCallback(Sub()
