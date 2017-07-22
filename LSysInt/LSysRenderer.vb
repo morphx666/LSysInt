@@ -8,6 +8,8 @@ Public Class LSysRenderer
 
     Private renderThread As Thread
 
+    Public Property Multiplier As Integer = 800
+
     Private Sub Renderer_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
         Me.SetStyle(ControlStyles.OptimizedDoubleBuffer, True)
@@ -36,8 +38,9 @@ Public Class LSysRenderer
                                           Catch
                                           End Try
                                       Loop
-                                  End Sub)
-        renderThread.IsBackground = True
+                                  End Sub) With {
+            .IsBackground = True
+                                  }
         renderThread.Start()
     End Sub
 
@@ -55,8 +58,7 @@ Public Class LSysRenderer
     Private Sub Start()
         mCurrentIter = 0
         If mLDef IsNot Nothing Then
-            Dim len As Double = 100
-            mLDef.Evaluate(New Vector(len, 0, New PointF(-len / 2, len / 2)))
+            mLDef.Evaluate(New Vector(Multiplier, 0, New PointF(-Multiplier / 2, Multiplier / 2)))
         End If
     End Sub
 

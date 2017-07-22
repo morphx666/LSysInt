@@ -103,9 +103,9 @@ Public Class FormMain
 
         ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Hilbert's Curve",
 "HilbertCurve {
-    level: 5
+    level: 6
 
-    axiom: A(0.1)
+    axiom: A(0.01)
     rule: A(n) = - K(n) F(n) + A(n) F(n) A(n) + F(n) K(n) -
     rule: K(n) = + A(n) F(n) - K(n) F(n) K(n) - F(n) A(n) +
 }"))
