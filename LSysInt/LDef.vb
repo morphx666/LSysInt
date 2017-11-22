@@ -33,6 +33,7 @@ Public Class LDef
         Me.Axiom = ""
 
         Dim data As String = ""
+        Dim ruleData As New List(Of Tuple(Of String, String))
 
         Dim lines() As String = code.Split(Environment.NewLine)
         For i As Integer = 0 To lines.Length - 1
@@ -56,7 +57,7 @@ Public Class LDef
                         Case "axiom:" : Axiom = data.Trim()
                         Case "rule:"
                             Dim tokens() As String = data.Split("=")
-                            Rules.Add(New Rule(tokens(0).Trim(), tokens(1).Trim()))
+                            ruleData.Add(New Tuple(Of String, String)(tokens(0).Trim(), tokens(1).Trim()))
                         Case "level:" : If Not Integer.TryParse(data, mMaxLevel) OrElse mMaxLevel < 1 Then mMaxLevel = 1
                         Case "angle:" : Double.TryParse(data, defaultAngle)
                         Case "offsetX:" : Double.TryParse(data, offsetX)
@@ -68,6 +69,10 @@ Public Class LDef
                     End Select
                 End If
             Next
+        Next
+
+        For Each rule In ruleData
+            Rules.Add(New Rule(rule.Item1, ApplyConstants(rule.Item2)))
         Next
     End Sub
 
@@ -96,6 +101,21 @@ Public Class LDef
         End Set
     End Property
 
+    Private Sub ApplyConstants(data As List(Of String))
+        For Each c In Constants
+            For n As Integer = 0 To data.Count - 1
+                data(n) = data(n).Replace(c.Name, c.Value)
+            Next
+        Next
+    End Sub
+
+    Private Function ApplyConstants(data As String) As String
+        For Each c In Constants
+            data = data.Replace(c.Name, c.Value)
+        Next
+        Return data
+    End Function
+
     Public Sub Evaluate(initialVector As Vector)
         AbortIterations()
 
@@ -123,6 +143,7 @@ Public Class LDef
                                             Next
                                         Next
 
+                                        ApplyConstants(newIter)
                                         iter = newIter.ToList()
 
                                         For Each c In Constants
