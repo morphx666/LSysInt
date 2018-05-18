@@ -19,6 +19,8 @@ Public Class FormMain
     End Class
 
     Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LSysRendererCtrl.RenderMode = LSysInt.LSysRenderer.RenderModes.Default
+
         ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Von Koch Simple",
 "VonKochSimple {
     level: 5
@@ -71,17 +73,15 @@ Public Class FormMain
     rule: C(d) = %(0,d,0.1,1)
 }"))
 
-        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Sierpinski Triangle",
-"SierpinskiTriangle  {
+        ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Sierpinski Arrowhead Triangle",
+"SierpinskiArrowheadTriangle  {
     level: 7
     angle: 60
     offsetX: -80
     offsetY: -800
-    constant: A = F
-    constant: B = F
-    axiom: %(0,0.8,1,1) A(0.01)
-    rule: A(x) = + B(x) - A(x) - B(x) +
-    rule: B(x) = - A(x) + B(x) + A(x) - 
+    axiom: X(0.01) F(0.01)
+    rule: X(x) = Y(x) F(x) + X(x) F(x) + Y(x)
+    rule: Y(x) = X(x) F(x) - Y(x) F(x) - X(x) 
 }"))
 
         ComboBoxLSysCodeDefs.Items.Add(New LSysCodeDef("Rectangular Wave",

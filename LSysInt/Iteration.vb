@@ -77,7 +77,7 @@ Public Class Iteration
                 val = ev.Evaluate()
             Catch
                 valIsValid = False
-                'RaiseEvent [Error](Me, New EventArgs)
+                RaiseEvent [Error](Me, New EventArgs())
             End Try
             pen = False
 
@@ -97,9 +97,9 @@ Public Class Iteration
                             v2.Move(-defaultLength * v1.Magnitude)
                         End If
                         pen = True
-                    Case "f" : If valIsValid Then v2.Move(val * v1.Magnitude) Else v2.Move(defaultLength * v1.Magnitude)
-                    Case "+" : If valIsValid Then v2.Angle += val Else v2.Angle += defaultAngle
-                    Case "-" : If valIsValid Then v2.Angle -= val Else v2.Angle -= defaultAngle
+                    Case "f" : v2.Move(If(valIsValid, val, defaultLength) * v1.Magnitude)
+                    Case "+" : v2.Angle += If(valIsValid, val, defaultAngle)
+                    Case "-" : v2.Angle -= If(valIsValid, val, defaultAngle)
                     Case "[" : vStack.Push(New Vector(v2))
                     Case "]" : v2 = vStack.Pop() : Continue For
                     Case "%"
@@ -111,7 +111,7 @@ Public Class Iteration
                         Next
                         v2.Color = Drawing.Color.FromArgb(v(3), v(0), v(1), v(2))
                     Case Else ' Ignore unprocessed statement
-                        Thread.Sleep(1)
+                        'Thread.Sleep(1)
                 End Select
 
                 If pen Then mVectors.Add(New Vector(v1.Origin, v2.Origin, v2.Color))

@@ -159,6 +159,12 @@ Public Class Vector
         Origin = ov.Destination
     End Sub
 
+    Public Sub Translate(x As Double, y As Double)
+        Dim dp As PointF = Destination
+        mOrigin = New PointF(mOrigin.X + x, mOrigin.Y + y)
+        Destination = New PointF(dp.X + x, dp.Y + y)
+    End Sub
+
     Private Sub ResetVectorFromPoints(px1 As Double, py1 As Double, px2 As Double, py2 As Double)
         Dim v As Vector = Vector.VectorFromPoints(px1, py1, px2, py2)
 
