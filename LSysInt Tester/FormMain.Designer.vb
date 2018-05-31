@@ -46,7 +46,7 @@ Partial Class FormMain
         'SplitContainerMain.Panel2
         '
         Me.SplitContainerMain.Panel2.Controls.Add(Me.LSysRendererCtrl)
-        Me.SplitContainerMain.Size = New System.Drawing.Size(951, 567)
+        Me.SplitContainerMain.Size = New System.Drawing.Size(951, 648)
         Me.SplitContainerMain.SplitterDistance = 303
         Me.SplitContainerMain.TabIndex = 1
         '
@@ -62,7 +62,7 @@ Partial Class FormMain
         Me.ComboBoxLSysCodeDefs.Location = New System.Drawing.Point(1, 0)
         Me.ComboBoxLSysCodeDefs.Margin = New System.Windows.Forms.Padding(0)
         Me.ComboBoxLSysCodeDefs.Name = "ComboBoxLSysCodeDefs"
-        Me.ComboBoxLSysCodeDefs.Size = New System.Drawing.Size(302, 22)
+        Me.ComboBoxLSysCodeDefs.Size = New System.Drawing.Size(302, 24)
         Me.ComboBoxLSysCodeDefs.TabIndex = 1
         '
         'TextBoxCode
@@ -74,12 +74,12 @@ Partial Class FormMain
         Me.TextBoxCode.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBoxCode.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxCode.ForeColor = System.Drawing.Color.GreenYellow
-        Me.TextBoxCode.Location = New System.Drawing.Point(0, 23)
+        Me.TextBoxCode.Location = New System.Drawing.Point(0, 26)
         Me.TextBoxCode.Margin = New System.Windows.Forms.Padding(0)
         Me.TextBoxCode.Multiline = True
         Me.TextBoxCode.Name = "TextBoxCode"
         Me.TextBoxCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBoxCode.Size = New System.Drawing.Size(303, 544)
+        Me.TextBoxCode.Size = New System.Drawing.Size(303, 622)
         Me.TextBoxCode.TabIndex = 0
         '
         'LSysRendererCtrl
@@ -87,18 +87,20 @@ Partial Class FormMain
         Me.LSysRendererCtrl.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LSysRendererCtrl.LDef = Nothing
         Me.LSysRendererCtrl.Location = New System.Drawing.Point(0, 0)
+        Me.LSysRendererCtrl.Multiplier = 800
         Me.LSysRendererCtrl.Name = "LSysRendererCtrl"
-        Me.LSysRendererCtrl.Size = New System.Drawing.Size(644, 567)
+        Me.LSysRendererCtrl.RenderMode = LSysInt.LSysRenderer.RenderModes.Centered
+        Me.LSysRendererCtrl.Size = New System.Drawing.Size(644, 648)
         Me.LSysRendererCtrl.TabIndex = 0
         '
         'FormMain
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.DimGray
-        Me.ClientSize = New System.Drawing.Size(951, 567)
+        Me.ClientSize = New System.Drawing.Size(951, 648)
         Me.Controls.Add(Me.SplitContainerMain)
-        Me.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Name = "FormMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "LSysInt Tester"

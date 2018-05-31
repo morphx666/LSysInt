@@ -3,6 +3,8 @@
     Public ReadOnly Property FunctionName As String
     Public ReadOnly Property Transform As String
 
+    Private ev As New Evaluator()
+
     Public Structure ApplyResult
         Public Enum ResultStatus
             OK
@@ -18,8 +20,6 @@
             Me.Status = status
         End Sub
     End Structure
-
-    Dim ev As New Evaluator()
 
     Public Sub New(fcn As String, transform As String)
         Dim vars As String = GetFcnPrm(fcn)
@@ -45,12 +45,13 @@
             Try
                 If token.Contains("(") Then
                     If token.StartsWith($"{FunctionName}(") Then
-                        Dim pr As String() = GetFcnPrm(token).Split(",")
+                        Dim pr As String() = GetFcnPrm(token).Split(","c)
                         If pr.Length = Variables.Count Then
                             Dim tx As String = Transform
+                            Dim var As String
                             For i As Integer = 0 To Variables.Count - 1
                                 If i = pr.Length Then Exit For
-                                Dim var As String = Variables(i)
+                                var = Variables(i)
                                 ev.Formula = pr(i)
                                 tx = tx.Replace(var, ev.Evaluate())
                             Next

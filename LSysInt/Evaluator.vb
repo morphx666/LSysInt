@@ -1,4 +1,4 @@
-﻿Imports NCalc
+﻿Imports NCalc2
 
 Public Class Evaluator
     Private mFormula As String

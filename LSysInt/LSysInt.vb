@@ -10,36 +10,38 @@ Public Class LSysInt
         For i As Integer = 0 To code.Length - 1
             newCode += code(i)
 
-            If code(i) = "(" Then
+            If code(i) = "("c Then
                 For j As Integer = i + 1 To code.Length - 1
                     Select Case code(j)
-                        Case " "
-                        Case ")" : newCode += code(j) : i = j : Exit For
+                        Case " "c
+                        Case ")"c : newCode += code(j) : i = j : Exit For
                         Case Else : newCode += code(j)
                     End Select
                 Next
             End If
         Next
         While newCode.Contains("  ")
-            newCode = newCode.Replace("  ", " ")
+            newCode = newCode.Replace("  ", " "c)
         End While
         code = newCode
 
+        Dim defName As String
+
         Try
             For i As Integer = 0 To code.Length - 1
-                If code(i) = "{" Then
-                    Dim defName As String = FindPreviousWord(code, i)
+                If code(i) = "{"c Then
+                    defname = FindPreviousWord(code, i)
                     For j As Integer = i + 1 To code.Length - 1
                         If Char.IsLetterOrDigit(code(j)) Then
                             For k = j + 1 To code.Length - 1
-                                If code(k) = "}" Then
+                                If code(k) = "}"c Then
                                     LDefs.Add(New LDef(defName, code.Substring(j, k - j)))
                                     j = code.Length
                                     i = k
                                     Exit For
                                 End If
                             Next
-                        ElseIf code(j) = "}" Then
+                        ElseIf code(j) = "}"c Then
                             LDefs.Add(New LDef(defName, code.Substring(j, j - i - 1)))
                             Exit For
                         End If

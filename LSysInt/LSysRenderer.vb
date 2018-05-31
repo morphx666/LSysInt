@@ -122,7 +122,7 @@ Public Class LSysRenderer
             Else
                 If mLDef IsNot Nothing Then
                     If mCurrentIter < mLDef.Iterations.Count Then
-                        For Each v In mLDef.Iterations(mCurrentIter).Vectors
+                        For Each v As Vector In mLDef.Iterations(mCurrentIter).Vectors
                             Using p As New Pen(v.Color)
                                 g.DrawLine(p, v.Origin, v.Destination)
                             End Using
@@ -134,6 +134,11 @@ Public Class LSysRenderer
         End Try
 
         g.ResetTransform()
-        g.DrawString($"Iteration: {mCurrentIter + 1}/{mLDef?.MaxLevel}", Me.Font, Brushes.White, 10, 10)
+
+        Try
+            g.DrawString($"Iteration: {mCurrentIter + 1}/{mLDef?.MaxLevel}", Me.Font, Brushes.White, 10, 10 + 12 * 0)
+            g.DrawString($"Vectors: {mLDef?.Iterations.Sum(Function(i) i.Vectors.Count):N0}", Me.Font, Brushes.White, 10, 10 + 12 * 1)
+        Catch
+        End Try
     End Sub
 End Class

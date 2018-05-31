@@ -178,7 +178,7 @@ Public Class Vector
         Dim dx As Double = px2 - px1
         Dim dy As Double = py2 - py1
 
-        v.Angle = Vector.fAtan(dx, dy)
+        v.Angle = Math.Atan2(dy, dx) * toDeg ' Vector.FAtan(dx, dy)
         v.Magnitude = Vector.Distance(dx, dy)
         v.Origin = New PointF(px1, py1)
 
@@ -191,37 +191,37 @@ Public Class Vector
         Return v
     End Function
 
-    Private Shared Function fAtan(dx As Double, dy As Double) As Double
-        Dim a As Double
+    'Private Shared Function FAtan(dx As Double, dy As Double) As Double
+    '    Dim a As Double
 
-        If dy = 0 Then
-            If dx > 0 Then
-                a = 0
-            Else
-                a = 180
-            End If
-        Else
-            a = Math.Atan(dy / dx) * toDeg
-            Select Case a
-                Case Is > 0
-                    If dx < 0 AndAlso dy < 0 Then a += 180
-                Case 0
-                    If dx < 0 Then a = 180
-                Case Is < 0
-                    If dy > 0 Then
-                        If dx > 0 Then
-                            a = Math.Abs(a)
-                        Else
-                            a += 180
-                        End If
-                    Else
-                        a += 360
-                    End If
-            End Select
-        End If
+    '    If dy = 0 Then
+    '        If dx > 0 Then
+    '            a = 0
+    '        Else
+    '            a = 180
+    '        End If
+    '    Else
+    '        a = Math.Atan(dy / dx) * toDeg
+    '        Select Case a
+    '            Case Is > 0
+    '                If dx < 0 AndAlso dy < 0 Then a += 180
+    '            Case 0
+    '                If dx < 0 Then a = 180
+    '            Case Is < 0
+    '                If dy > 0 Then
+    '                    If dx > 0 Then
+    '                        a = Math.Abs(a)
+    '                    Else
+    '                        a += 180
+    '                    End If
+    '                Else
+    '                    a += 360
+    '                End If
+    '        End Select
+    '    End If
 
-        Return a
-    End Function
+    '    Return a
+    'End Function
 
     Public Sub Paint(g As Graphics, area As Rectangle, c As Color, Optional s As Integer = 1)
         If s = 0 OrElse Me.Magnitude = 0 Then Exit Sub
@@ -248,7 +248,8 @@ Public Class Vector
         Dim dy As Double = Y1 - p.Y
         Dim d As Double = Vector.Distance(dx, dy)
 
-        Dim a As Double = (Vector.fAtan(dx, dy) + angle) * toRad
+        'Dim a As Double = (Vector.FAtan(dx, dy) + angle) * toRad
+        Dim a As Double = (Math.Atan2(dy, dx) * toDeg + angle) * toRad
 
         Dim xp1 As Double = p.X + d * Math.Cos(a)
         Dim yp1 As Double = p.Y + d * Math.Sin(a)
@@ -256,7 +257,8 @@ Public Class Vector
         dx = X2 - p.X
         dy = Y2 - p.Y
         d = Vector.Distance(dx, dy)
-        a = (Vector.fAtan(dx, dy) + angle) * toRad
+        'a = (Vector.FAtan(dx, dy) + angle) * toRad
+        a = (Math.Atan2(dy, dx) * toDeg + angle) * toRad
 
         ResetVectorFromPoints(xp1, yp1, p.X + d * Math.Cos(a), p.Y + d * Math.Sin(a))
     End Sub
@@ -339,14 +341,12 @@ Public Class Vector
     End Function
 
     Public Overrides Function ToString() As String
-        Return String.Format("Magnitude: {0}" & vbCrLf &
-                                "Angle: {1}" & vbCrLf &
-                                "({2}, {3})-({4}, {5})" & vbCrLf &
-                                "y = {6}x + {7}",
+        Return String.Format("Magnitude: {0:F2}{8}Angle: {1:F2}{8}({2:F2}, {3:F2})-({4:F2}, {5:F2}){8}y = {6:F2}x + {7:F2}",
                                 mMagnitude,
                                 mAngle,
                                 X1, Y1, X2, Y2,
-                                Slope, X1
+                                Slope, X1,
+                                " " + Environment.NewLine
                             )
     End Function
 End Class

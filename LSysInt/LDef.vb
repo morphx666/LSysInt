@@ -34,13 +34,15 @@ Public Class LDef
 
         Dim data As String = ""
         Dim ruleData As New List(Of Tuple(Of String, String))
+        Dim p As Integer
+        Dim tokens() As String
 
         Dim lines() As String = code.Split(Environment.NewLine)
         For i As Integer = 0 To lines.Length - 1
             For Each internal In internals
                 internal += ":"
 
-                Dim p As Integer = lines(i).IndexOf(internal)
+                p = lines(i).IndexOf(internal)
                 If p <> -1 Then
                     data = lines(i).Substring(p + internal.Length + 1).Trim() + " "
 
@@ -56,7 +58,7 @@ Public Class LDef
                     Select Case internal
                         Case "axiom:" : Axiom = data.Trim()
                         Case "rule:"
-                            Dim tokens() As String = data.Split("=")
+                            tokens = data.Split("=")
                             ruleData.Add(New Tuple(Of String, String)(tokens(0).Trim(), tokens(1).Trim()))
                         Case "level:" : If Not Integer.TryParse(data, mMaxLevel) OrElse mMaxLevel < 1 Then mMaxLevel = 1
                         Case "angle:" : Double.TryParse(data, defaultAngle)
@@ -64,7 +66,7 @@ Public Class LDef
                         Case "offsetY:" : Double.TryParse(data, offsetY)
                         Case "length:" : Double.TryParse(data, defaultLength)
                         Case "constant:"
-                            Dim tokens() As String = data.Split("=")
+                            tokens = data.Split("=")
                             Constants.Add(New Constant(tokens(0).Trim(), tokens(1).Trim()))
                     End Select
                 End If
@@ -123,7 +125,7 @@ Public Class LDef
         initialVector.Magnitude += defaultLength
 
         evalThread = New Thread(Sub()
-                                    Dim iter As List(Of String) = Axiom.Split(" ").ToList()
+                                    Dim iter As List(Of String) = Axiom.Split(" "c).ToList()
                                     Dim newIter As New List(Of String)
                                     Dim ar As Rule.ApplyResult
                                     Dim tmp As String = ""
@@ -138,25 +140,27 @@ Public Class LDef
                                                 ar = rule.Apply(token)
                                                 If ar.Status = Rule.ApplyResult.ResultStatus.OK Then
                                                     newIter.RemoveAt(newIter.Count - 1)
-                                                    newIter.AddRange(ar.Result.Split(" "))
+                                                    newIter.AddRange(ar.Result.Split(" "c))
                                                 End If
                                             Next
                                         Next
 
                                         ApplyConstants(newIter)
-                                        iter = newIter.ToList()
+                                        iter = newIter.ToList() ' Clone
 
-                                        For Each c In Constants
-                                            For n As Integer = 0 To newIter.Count - 1
-                                                newIter(n) = newIter(n).Replace(c.Name, c.Value)
-                                            Next
-                                        Next
+                                        ' FIXME: Isn't this redundant?
+                                        'For Each c In Constants
+                                        '    For n As Integer = 0 To newIter.Count - 1
+                                        '        newIter(n) = newIter(n).Replace(c.Name, c.Value)
+                                        '    Next
+                                        'Next
 
                                         mIterations.Add(New Iteration(newIter, initialVector, defaultLength, defaultAngle))
-                                        Thread.Sleep(1)
+                                        Thread.Sleep(100)
                                     Next
-                                End Sub)
-        evalThread.IsBackground = True
+                                End Sub) With {
+                                    .IsBackground = True
+                                }
         evalThread.Start()
     End Sub
 End Class
